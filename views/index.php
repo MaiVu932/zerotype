@@ -1,32 +1,36 @@
+<?php 
+    session_start();
+?>
+
 <!DOCTYPE HTML>
 <!-- Website template by freewebsitetemplates.com -->
 <html>
 <head>
 	<meta charset="UTF-8">
 	<title>Zerotype Website Template</title>
-	<link rel="stylesheet" href="css/style.css" type="text/css">
+	<link rel="stylesheet" href="../css/style.css" type="text/css">
 </head>
 <body>
 	<div id="header">
 		<div>
 			<div class="logo">
-				<a href="index.html">Zero Type</a>
+				<a href="index.php">Zero Type</a>
 			</div>
 			<ul id="navigation">
 				<li class="active">
-					<a href="index.html">Home</a>
+					<a href="index.php">Home</a>
 				</li>
 				<li>
-					<a href="features.html">Features</a>
+					<a href="features.php">Features</a>
 				</li>
 				<li>
-					<a href="news.html">News</a>
+					<a href="news.php">News</a>
 				</li>
 				<li>
-					<a href="about.html">About</a>
+					<a href="about.php">About</a>
 				</li>
 				<li>
-					<a href="contact.html">Contact</a>
+					<a href="contact.php">Contact</a>
 				</li>
 			</ul>
 		</div>
@@ -38,7 +42,7 @@
 				<h1>Ideas?</h1>
 				<h2>That's what we live for.</h2>
 				<p>
-					Wix is an online website builder with a simple drag & drop interface, meaning you do the work online and instantly publish to the web. <span><a href="index.html" class="btn">Try It Now!</a><b>Don’t worry it’s for free</b></span>
+					Wix is an online website builder with a simple drag & drop interface, meaning you do the work online and instantly publish to the web. <span><a href="index.php" class="btn">Try It Now!</a><b>Don’t worry it’s for free</b></span>
 				</p>
 			</div>
 		</div>
