@@ -41,7 +41,7 @@
 				
                     <?php foreach($categories as $category): ?>
                         <li>
-                            <a href="?category-id=<?php echo $category['id'] ?>"><?php echo $category['name'] ?></a>
+                            <a href="?category-id=<?php echo $category['id'] . (isset($_GET['page']) ? ('&page=' . $_GET['page']) : ''); ?>"><?php echo $category['name'] ?></a>
                         </li>
                     <?php endforeach; ?>
                 
@@ -52,7 +52,7 @@
 	</div>
     <ul style="display: flex; list-style-type: none;">
 			<?php for($i=0; $i<= ceil($pages) / 5; $i++): ?>
-				<li style="margin-left: 16px;"><a href="?page=<?php echo $i+1; ?>"><?php echo $i+1; ?></a></li>
+				<li style="margin-left: 16px;"><a href="?page=<?php echo $i+1 . (isset($_GET['category-id']) ? ('&category-id=' . $_GET['category-id']) : '') ; ?>"><?php echo $i+1; ?></a></li>
 			<?php endfor; ?>
 		</ul>
 	

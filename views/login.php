@@ -14,7 +14,6 @@
 <?php 
 include '../User.php';
  if(isset($_POST['sub-login'])) {
-     var_dump('ok');
      $user = new User();
    $user->signIn($_POST);
  }

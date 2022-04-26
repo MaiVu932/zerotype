@@ -101,7 +101,6 @@ class User extends Database
 
     public function signIn(array $data)
     {
-        var_dump($data);
         $email = $data['txt-username'];
         $password = $data['pw-password'];
         $query = 'SELECT * FROM users WHERE password_current = "' . $password . '" ' ;
