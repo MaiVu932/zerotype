@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.content {
+    width: 80% !important;
+    margin-top: 10px !important;
+    margin: auto;
+    margin-bottom: 10px !important;
+}
+
+.content .title {
+    width: 100%;
+    display: flex;
+}
+
+.content .title h1 {
+    flex: 4;
+}
+
+.content .title a {
+    flex: 1;
+    margin-top: 5px;
+}
+ ul li {
+     list-style-type: none;
+     padding-top: 10px !important;
+ }
+

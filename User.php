@@ -7,6 +7,34 @@ require_once('db.php');
 class User extends Database
 {
 
+    public function getInfo($id)
+    {
+        $query = "SELECT * FROM users WHERE id = '" . $id . "'";
+       return $this->get_data($query);
+
+    }
+
+    public function edit($data, $id)
+    {
+        // if(isset($this->prosessFile()['err'])) {
+        //     echo '<script>alert("' . $this->prosessFile()['err'] . '")</script>';
+        //     return;
+        // }
+  
+        $info = [
+            'username' => $data['txt-username'],
+            // 'image' => $this->prosessFile(),
+            'password_current' => $data['password'],
+            'email' => $data['email'],
+            'num_phone' => $data['txt-num-phone'],
+            'address' => $data['txt-address'],
+            'birthday' => $data['date-birthday']
+        ];
+
+        $this->update('users', $info, 'id = "'. $id . '"');
+        echo '<script>alert("Update success !")</script>';
+    }
+
     /**
      * process upload file avatar
      *
@@ -26,11 +54,13 @@ class User extends Database
         $fileName = $_FILES['file-avata']['name'];
 
 		if( !in_array($extension, $allowed) ) {
-			exit(json_encode(['state' => 'not_match_ext']));
+            return ['err' => 'not match extension'];
+			// exit(json_encode(['state' => 'not_match_ext']));
 		}
 
 		if( !($file_size <= 500000) )  {
-			exit(json_encode(['state' => 'Dung lượng file quá lớn']));
+            return ['err' => 'Image size is to big'];
+			// exit(json_encode(['state' => 'Dung lượng file quá lớn']));
 		}
 		// bat dau upload
 		move_uploaded_file($temp_name, '../images/avata/' . $fileName);
@@ -45,42 +75,45 @@ class User extends Database
      */
     public function signUp(array $data)
     {
-        if(!$this->prosessFile()) {
-            return 'Uploat file loi';
+        if(isset($this->prosessFile()['err'])) {
+            echo '<script>alert("' . $this->prosessFile()['err'] . '")</script>';
+            return;
         }
+  
         $info = [
-            'name' => $data['txt-username'],
-            'avata' => $this->prosessFile(),
-            'password_hash' => password_hash($data['password'], PASSWORD_DEFAULT),
+            'username' => $data['txt-username'],
+            'image' => $this->prosessFile(),
+            // 'password_hash' => password_hash($data['password'], PASSWORD_DEFAULT),
             'password_current' => $data['password'],
             'email' => $data['email'],
-            'fullname' => $data['txt-fullname'],
-            'gender' => $data['gender'],
-            'hobby' => implode('-', $data['hobby'])
+            'num_phone' => $data['txt-num-phone'],
+            'address' => $data['txt-address'],
+            'birthday' => $data['date-birthday'],
+            'permission' => 0
         ];
 
         $isSingUp = $this->insert('users', $info);
         if(!$isSingUp) {
-            exit('Loi');
+            echo '<script> alert("Error") </script>';
         }
         header('location: login.php');
     }
 
     public function signIn(array $data)
     {
-        $email = $data['email'];
-        $password = $data['password'];
-        $query = 'SELECT id, name, permission FROM users WHERE email = "' . $email . '" AND password_current = "' . $password . '"' ;
+        var_dump($data);
+        $email = $data['txt-username'];
+        $password = $data['pw-password'];
+        $query = 'SELECT * FROM users WHERE password_current = "' . $password . '" ' ;
+        $query .= ' AND ( username = "' . $email . '" OR email = "' . $email . '" )';
         $infos = $this->get_data($query);
 
         if(!count($infos)) {
-            exit('Dang nhap that bai');
+            echo '<script>Login fail</script>';
+            return;
         }
-	    $_SESSION['name'] = $data['name'];
-	    $_SESSION['id'] = $data['id'];
-	    $_SESSION['permission'] = $data['permission'];
-        
-        echo '<script>alert("Dang nhap thanh cong")</script>';
+        $_SESSION['user'] = $infos;
+        header('location: news.php?login=success');
     }
 
     

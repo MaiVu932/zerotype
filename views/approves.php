@@ -1,21 +1,21 @@
-<?php 
-    session_start();
-    include 'header.php';
+<?php include 'header.php' ?>
+<?php
     include '../PostRepo.php';
     $post = new PostRepo();
     $categories = $post->categoris();
-    $pages = count($post->posts());
+    $post->validate();
+    // $posts = $post->postNoApproves();
 ?>
 
-	
-	<div id="contents">
+
+<div id="contents">
 		<div class="main">
-			<h1>News</h1>
+			<h1>List of new articles that need approval</h1>
 			<ul class="news">
-                <?php if(!count($post->postPage())): ?>
+                <?php if(!count($post->postNoApproves())): ?>
                     <p>No content</p>
                 <?php endif; ?>
-                <?php foreach($post->postPage() as $post): ?>
+                <?php foreach($post->postNoApproves() as $post): ?>
 
                     <li>
                         <div class="date">
@@ -27,8 +27,16 @@
                         <h2><?php echo $post['title'] ?></h2>
                         <span><?php echo $post['username'] ?></span>
                         <p>
-                            <?php echo substr($post['content'], 0, 150) . ' ...'; ?>
-                            <span><a href="post.php?id=<?php echo $post['id'] ?>" class="more">Read More</a></span>
+                            <?php if(isset($_GET['id']) && $_GET['id'] == $post['id']): ?>
+                                <?php echo $post['content'] ?>
+                            <?php else: ?>
+                                <?php echo substr($post['content'], 0, 150) . ' ...'; ?>
+                            <?php endif; ?>
+                            
+                            <span><a href="?id=<?php echo $post['id'] ?>" class="more">Read More</a></span>
+                            <span><a href="approves_agree.php?id=<?php echo $post['id'] ?>" class="more">Agree</a></span>
+                            <span><a href="approves_deny.php?id=<?php echo $post['id'] ?>" class="more">Deny</a></span>
+                        
                         </p>
                     </li>
 
@@ -47,14 +55,7 @@
                 
 			</ul>
 		</div>
-
-       
 	</div>
-    <ul style="display: flex; list-style-type: none;">
-			<?php for($i=0; $i<= ceil($pages) / 5; $i++): ?>
-				<li style="margin-left: 16px;"><a href="?page=<?php echo $i+1; ?>"><?php echo $i+1; ?></a></li>
-			<?php endfor; ?>
-		</ul>
-	
 
-    <?php include 'footer.php' ?>
+
+<?php include 'footer.php' ?>

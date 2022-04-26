@@ -45,7 +45,6 @@ class Database
 
 
 		$sql = "INSERT INTO $table($field_list) VALUES($value_list);";
-		var_dump($sql);
 
 		return $this->_connection->query($sql);
 	}
@@ -56,11 +55,12 @@ class Database
 
 		$field_list = '';
 		foreach ($data as $key => $value) {
-			$field_list .= "$key = " . $this->_connection->real_escape_string($value) . ", ";
+			$field_list .= "$key = '" . $this->_connection->real_escape_string($value) . "', ";
 		}
 		$field_list = trim($field_list, ', ');
 		$sql = "UPDATE $table SET $field_list WHERE $where ;";
-		return $this->_connection->query($sql);
+		// var_dump($sql);
+        return $this->_connection->query($sql);
 	}
 
 	public function delete($table, $where = null)
@@ -80,7 +80,7 @@ class Database
 		$result = [];
 
 		$this->connect();
-
+        // var_dump($sql);
 		$query = $this->_connection->query($sql);
 
 		if(!$query)

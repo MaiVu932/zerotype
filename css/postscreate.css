@@ -1,0 +1,17 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.title {
+    width: 100%;
+    display: flex;
+}
+
+.title h1 {
+    flex: 4;
+}
+
+.title a {
+    flex: 1;
+}
