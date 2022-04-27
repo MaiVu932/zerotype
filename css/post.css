@@ -1,0 +1,35 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.comment {
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+}
+.comment .avata {
+    flex: 2;
+}
+
+.comment .cmt-content {
+    flex: 10;
+    padding-right: 10px;
+    margin-right: 10px;
+}
+
+.comment .cmt-content span {
+    color: #dda;
+}
+textarea {
+    border:1px solid #ddd !important;
+}
+textarea:focus {
+    border:1px solid rgb(55, 54, 54) !important;
+}
+
+input {
+    width: 60px;
+    height: 40px;
+
+}

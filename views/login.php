@@ -13,10 +13,12 @@
 
 <?php 
 include '../User.php';
+$user = new User();
+
  if(isset($_POST['sub-login'])) {
-     $user = new User();
    $user->signIn($_POST);
  }
+ $user->validate();
 
 
 ?>

@@ -5,6 +5,7 @@
     $post = new PostRepo();
     $categories = $post->categoris();
     $pages = count($post->posts());
+
 ?>
 
 	
@@ -23,12 +24,14 @@
                                 <span><?php echo $post['month'] ?> </span>
                                 <?php echo $post['year'] ?>
                             </p>
+                             
                         </div>
-                        <h2><?php echo $post['title'] ?></h2>
+                        <h2><?php echo $post['title'] ?></h2> 
+                        <span style="color: #726e6e;">Views: <?php echo $post['count_view'] ?></span> <br>
                         <span><?php echo $post['username'] ?></span>
                         <p>
                             <?php echo substr($post['content'], 0, 150) . ' ...'; ?>
-                            <span><a href="post.php?id=<?php echo $post['id'] ?>" class="more">Read More</a></span>
+                            <span><a href="post.php?id=<?php echo $post['id'] . '&viewer=' . $post['count_view'] ?>" class="more">Read More</a></span>
                         </p>
                     </li>
 

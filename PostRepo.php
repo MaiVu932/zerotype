@@ -4,6 +4,26 @@ include 'db.php';
 
 class PostRepo extends Database 
 {
+    public function createCommentToPost($content)
+    {
+        $comment = [
+            'user_id' => $_SESSION['user'][0]['id'],
+            'post_id' => $_GET['id'],
+            'content' => $content,
+            'create_at' => date("Y-m-d")
+        ];
+        $this->insert('comments', $comment);
+        header('location: ?id=' . $_GET['id'] . '&&comment-create=true');
+        return;
+    }
+
+    public function commentsByIdPost($idPost)
+    {
+        $query = "SELECT U.username, U.image, C.content, C.create_at FROM users U, comments C ";
+        $query .= " WHERE C.post_id = $idPost AND C.user_id = U.id; ";
+        
+        return $this->get_data($query);
+    }
 
     public function approveAgree($id)
     {
@@ -40,14 +60,21 @@ class PostRepo extends Database
         if(isset($_GET['delete']) && $_GET['delete'] == 'true') {
             echo '<script>alert("Delete your post success !")</script>';
         }
+
         if(isset($_GET['update']) && $_GET['update'] == 'true') {
             echo '<script>alert("Update your post success !")</script>';
         }
+
         if(isset($_GET['agree']) && $_GET['agree'] == 'true') {
             echo '<script>alert("Approval  success !")</script>';
         }
+
         if(isset($_GET['deny']) && $_GET['deny'] == 'true') {
             echo '<script>alert("Deny success !")</script>';
+        }
+
+        if(isset($_GET['comment-create']) && $_GET['comment-create'] == 'true') {
+            echo '<script>alert("Comment create success !")</script>';
         }
     }
 
@@ -125,26 +152,26 @@ class PostRepo extends Database
             $query = "";
             if(isset($_GET['category-id'])) {
                 $categoryId = $_GET['category-id'];
-                $query = " SELECT users.username,  posts.id, posts.title, posts.content, MONTH(create_at) month, YEAR(create_at) year";
+                $query = " SELECT users.username,  posts.id, posts.title, posts.count_view, posts.content, MONTH(create_at) month, YEAR(create_at) year";
                 $query .= " FROM posts, users WHERE posts.user_id = users.id AND posts.status = 1 AND posts.category_id = " . $categoryId;
                 $query .= "  ORDER BY create_at DESC LIMIT 5 OFFSET " . $start ;
                 return $this->get_data($query);
             }
 
-            $query = " SELECT users.username,  posts.id, posts.title, posts.content, MONTH(create_at) month, YEAR(create_at) year";
+            $query = " SELECT users.username,  posts.id, posts.title, posts.count_view, posts.content, MONTH(create_at) month, YEAR(create_at) year";
             $query .= " FROM posts, users WHERE posts.user_id = users.id AND posts.status = 1 ORDER BY create_at DESC LIMIT 5 OFFSET " . $start ;
             return $this->get_data($query);
         }
 
         if(isset($_GET['category-id'])) {
             $categoryId = $_GET['category-id'];
-            $query = " SELECT users.username,  posts.id, posts.title, posts.content, MONTH(create_at) month, YEAR(create_at) year";
+            $query = " SELECT users.username,  posts.id, posts.title, posts.count_view, posts.content, MONTH(create_at) month, YEAR(create_at) year";
             $query .= " FROM posts, users WHERE posts.user_id = users.id AND posts.status = 1 AND posts.category_id = " . $categoryId;
             $query .= " ORDER BY create_at DESC LIMIT 5 OFFSET 0";
             return $this->get_data($query);
         }
 
-        $query = " SELECT users.username,  posts.id, posts.title, posts.content, MONTH(create_at) month, YEAR(create_at) year";
+        $query = " SELECT users.username,  posts.id, posts.title, posts.count_view, posts.content, MONTH(create_at) month, YEAR(create_at) year";
         $query .= " FROM posts, users WHERE posts.user_id = users.id AND posts.status = 1 ORDER BY create_at DESC LIMIT 5 OFFSET 0 ";
         return $this->get_data($query);
         
@@ -153,7 +180,12 @@ class PostRepo extends Database
 
     public function postByIdPost(int $id)        
     {
-        $query = " SELECT categories.id c_id, categories.name c_name, posts.status, users.username,  posts.id, MONTH(create_at) month, YEAR(create_at) year, posts.content, posts.title";
+
+        $count = (int)$_GET['viewer'] + 1;
+        $postUpdate = ['count_view' => $count];
+        $this->update('posts', $postUpdate, 'id = ' . $id);
+
+        $query = " SELECT categories.id c_id, categories.name c_name,posts.count_view, posts.status, users.username,  posts.id, MONTH(create_at) month, YEAR(create_at) year, posts.content, posts.title";
         $query .= " FROM posts, users, categories WHERE posts.user_id = users.id AND posts.id = $id AND categories.id = posts.category_id  ";
         return $this->get_data($query)[0];
     }

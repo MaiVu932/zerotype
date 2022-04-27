@@ -105,17 +105,23 @@ class User extends Database
         $password = $data['pw-password'];
         $query = 'SELECT * FROM users WHERE password_current = "' . $password . '" ' ;
         $query .= ' AND ( username = "' . $email . '" OR email = "' . $email . '" )';
+
         $infos = $this->get_data($query);
 
         if(!count($infos)) {
-            echo '<script>Login fail</script>';
+            header('location: login.php?login=fail');
             return;
         }
         $_SESSION['user'] = $infos;
         header('location: news.php?login=success');
     }
 
-    
+    public function validate()
+    {
+        if(isset($_GET['login']) && $_GET['login'] == 'fail') {
+            echo '<script>alert("Login fail")</script>';
+        }
+    }
 
 
 
